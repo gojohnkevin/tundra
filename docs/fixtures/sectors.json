@@ -1,0 +1,74 @@
+[
+{
+    "model": "pse.sector",
+    "pk": 1,
+    "fields": {
+        "name": "PSEi",
+        "created_at": "2016-03-23T10:04:07.243Z",
+        "updated_at": "2016-03-23T10:04:07.243Z"
+    }
+},
+{
+    "model": "pse.sector",
+    "pk": 2,
+    "fields": {
+        "name": "All Shares",
+        "created_at": "2016-03-23T10:04:31.304Z",
+        "updated_at": "2016-03-23T10:04:31.304Z"
+    }
+},
+{
+    "model": "pse.sector",
+    "pk": 3,
+    "fields": {
+        "name": "Financials",
+        "created_at": "2016-03-23T10:04:39.941Z",
+        "updated_at": "2016-03-23T10:04:39.941Z"
+    }
+},
+{
+    "model": "pse.sector",
+    "pk": 4,
+    "fields": {
+        "name": "Industrial",
+        "created_at": "2016-03-23T10:04:49.646Z",
+        "updated_at": "2016-03-23T10:04:49.646Z"
+    }
+},
+{
+    "model": "pse.sector",
+    "pk": 5,
+    "fields": {
+        "name": "Holding Firms",
+        "created_at": "2016-03-23T10:04:55.562Z",
+        "updated_at": "2016-03-23T10:04:55.562Z"
+    }
+},
+{
+    "model": "pse.sector",
+    "pk": 6,
+    "fields": {
+        "name": "Services",
+        "created_at": "2016-03-23T10:05:01.380Z",
+        "updated_at": "2016-03-23T10:05:01.380Z"
+    }
+},
+{
+    "model": "pse.sector",
+    "pk": 7,
+    "fields": {
+        "name": "Mining and Oil",
+        "created_at": "2016-03-23T10:05:06.673Z",
+        "updated_at": "2016-03-23T10:05:06.673Z"
+    }
+},
+{
+    "model": "pse.sector",
+    "pk": 8,
+    "fields": {
+        "name": "Property",
+        "created_at": "2016-03-23T10:05:13.885Z",
+        "updated_at": "2016-03-23T10:05:13.885Z"
+    }
+}
+]
