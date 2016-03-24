@@ -85,7 +85,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'tundradb',
         'USER': 'root',
-        'PASSWORD': 'root',
+        'PASSWORD': '9j2YN7tRUGckmN9W',
         'HOST': '',
         'PORT': '',
     }
