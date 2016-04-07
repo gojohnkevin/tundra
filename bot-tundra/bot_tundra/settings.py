@@ -8,6 +8,15 @@
 #     http://doc.scrapy.org/en/latest/topics/settings.html
 #     http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
 #     http://scrapy.readthedocs.org/en/latest/topics/spider-middleware.html
+import os, sys
+
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+sys.path.insert(0, os.path.join(BASE_DIR, '../tundra'))
+#sys.path.insert(0, os.path.join(BASE_DIR, '../property_app', 'apps'))
+#sys.path.insert(0, os.path.join(BASE_DIR, '../property_app', 'libs'))
+#sys.path.insert(0, '/Users/kevingo/personal/projects/tundra-project/tundra')
+
+os.environ['DJANGO_SETTINGS_MODULE'] = 'tundra.settings'
 
 BOT_NAME = 'bot_tundra'
 

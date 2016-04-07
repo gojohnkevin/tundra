@@ -1,14 +1,8 @@
 # -*- coding: utf-8 -*-
+from scrapy_djangoitem import DjangoItem
 
-# Define here the models for your scraped items
-#
-# See documentation in:
-# http://doc.scrapy.org/en/latest/topics/items.html
-
-import scrapy
+from tundra.apps.pse.models import Index
 
 
-class BotTundraItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
-    pass
+class IndexItem(DjangoItem):
+    django_model = Index
