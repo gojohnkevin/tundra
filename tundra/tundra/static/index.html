@@ -26,6 +26,7 @@ body {
 </style>
 <body>
   <ul>
+    <li><a id="sector" href="#" value="">Reset</a></li>
     <li><a id="sector" href="#" value="psei">PSEi</a></li>
     <li><a id="sector" href="#" value="all shares">All Shares</a></li>
     <li><a id="sector" href="#" value="financials">Financials</a></li>
@@ -47,7 +48,13 @@ $(document).ready(function(){
   $("a#sector").on("click", function(event){
     event.preventDefault();
     $("svg").remove();
-    loadGraph(source_url+'?name='+ $(this).attr('value'));
+    var value = $(this).attr('value');
+    if(value){
+      loadGraph(source_url+'?name='+ );
+    }
+    else {
+      loadGraph(source_url)
+    }
   });
 });
 
