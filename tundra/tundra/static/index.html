@@ -25,170 +25,135 @@ body {
 
 </style>
 <body>
+  <ul>
+    <li><a id="sector" href="#" value="psei">PSEi</a></li>
+    <li><a id="sector" href="#" value="all shares">All Shares</a></li>
+    <li><a id="sector" href="#" value="financials">Financials</a></li>
+    <li><a id="sector" href="#" value="industrial">Industrial</a></li>
+    <li><a id="sector" href="#" value="holding firms">Holding Firms</a></li>
+    <li><a id="sector" href="#" value="services">Services</a></li>
+    <li><a id="sector" href="#" value="mining and oil">Mining and Oil</a></li>
+    <li><a id="sector" href="#" value="property">Property</a></li>
+  </ul>
 <script src="http://d3js.org/d3.v3.min.js"></script>
-<script>
+<script src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
 
-var margin = {top: 20, right: 80, bottom: 30, left: 50},
+<script type="text/javascript">
+var source_url = "http://localhost:8000/api/sectors/";
+
+$(document).ready(function(){
+  loadGraph(source_url);
+
+  $("a#sector").on("click", function(event){
+    event.preventDefault();
+    $("svg").remove();
+    loadGraph(source_url+'?name='+ $(this).attr('value'));
+  });
+});
+
+
+function loadGraph(source_url){
+  var margin = {top: 20, right: 80, bottom: 30, left: 50},
     width = 960 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
-var parseDateJson = d3.time.format("%Y%m%d%H%M").parse;
+  var parseDateJson = d3.time.format("%Y%m%d%H%M").parse;
 
-var x = d3.time.scale()
-    .range([0, width]);
+  var x = d3.time.scale()
+      .range([0, width]);
 
-var y = d3.scale.linear()
-    .range([height, 0]);
+  var y = d3.scale.linear()
+      .range([height, 0]);
 
-var color = d3.scale.category10();
+  var color = d3.scale.category10();
 
-var xAxis = d3.svg.axis()
-    .scale(x)
-    .orient("bottom");
+  var xAxis = d3.svg.axis()
+      .scale(x)
+      .orient("bottom");
 
-var yAxis = d3.svg.axis()
-    .scale(y)
-    .orient("left");
+  var yAxis = d3.svg.axis()
+      .scale(y)
+      .orient("left");
 
-var line = d3.svg.line()
-    .interpolate("basis")
-    .x(function(d) { return x(d.created_at); })
-    .y(function(d) { return y(d.value); });
+  var line = d3.svg.line()
+      .interpolate("basis")
+      .x(function(d) { return x(d.created_at); })
+      .y(function(d) { return y(d.value); });
 
-var svg = d3.select("body").append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-  .append("g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+  var svg = d3.select("body").append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-/*
-d3.tsv("data.tsv", function(error, data) {
-  if (error) throw error;
+  d3.json(source_url, function(error, data) {
+    if (error) throw error;
 
-  color.domain(d3.keys(data[0]).filter(function(key) { return key !== "date"; }));
+    color.domain(data.map(function (d) { return d.sector; }));
+    
+    data.forEach(function (kv) {
+        kv.indices.forEach(function (d) {
+            d.value = parseFloat(d.value);
+            d.created_at = parseDateJson(d.created_at);
+        });
+    });
 
-  data.forEach(function(d) {
-    d.date = parseDate(d.date);
-  });
+    var sectors = data;
 
-  var cities = color.domain().map(function(name) {
-    return {
-      name: name,
-      values: data.map(function(d) {
-        return {date: d.date, temperature: +d[name]};
-      })
-    };
-  });
+    var minX = d3.min(data, function (kv) { return d3.min(kv.indices, function (d) { return d.created_at; }) });
+    var maxX = d3.max(data, function (kv) { return d3.max(kv.indices, function (d) { return d.created_at; }) });
+    var minY = d3.min(data, function (kv) { return d3.min(kv.indices, function (d) { return d.value; }) });
+    var maxY = d3.max(data, function (kv) { return d3.max(kv.indices, function (d) { return d.value; }) });
 
-  x.domain(d3.extent(data, function(d) { return d.date; }));
+    x.domain([minX, maxX]);
+    y.domain([minY, maxY]);
 
-  y.domain([
-    d3.min(cities, function(c) { return d3.min(c.values, function(v) { return v.temperature; }); }),
-    d3.max(cities, function(c) { return d3.max(c.values, function(v) { return v.temperature; }); })
-  ]);
-
-  svg.append("g")
+    svg.append("g")
       .attr("class", "x axis")
       .attr("transform", "translate(0," + height + ")")
       .call(xAxis);
 
-  svg.append("g")
-      .attr("class", "y axis")
-      .call(yAxis)
-    .append("text")
-      .attr("transform", "rotate(-90)")
-      .attr("y", 6)
-      .attr("dy", ".71em")
-      .style("text-anchor", "end")
-      .text("Temperature (ºF)");
+    svg.append("g")
+        .attr("class", "y axis")
+        .call(yAxis)
+        .append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 6)
+        .attr("dy", ".71em")
+        .style("text-anchor", "end")
+        .text("value");
 
-  var city = svg.selectAll(".city")
-      .data(cities)
-    .enter().append("g")
-      .attr("class", "city");
+    var sector = svg.selectAll(".sector")
+        .data(sectors)
+        .enter().append("g")
+        .attr("class", "sector");
 
-  city.append("path")
-      .attr("class", "line")
-      .attr("d", function(d) { return line(d.values); })
-      .style("stroke", function(d) { return color(d.name); });
+    sector.append("path")
+        .attr("class", "line")
+        .attr("d", function (d) {
+        return line(d.indices);
+    })
+        .style("stroke", function (d) {
+        return color(d.sector);
+    });
 
-  city.append("text")
-      .datum(function(d) { return {name: d.name, value: d.values[d.values.length - 1]}; })
-      .attr("transform", function(d) { return "translate(" + x(d.value.date) + "," + y(d.value.temperature) + ")"; })
-      .attr("x", 3)
-      .attr("dy", ".35em")
-      .text(function(d) { return d.name; });
-});
-
-*/
-
-d3.json("http://tundra.thekevingo.com/api/sectors/?format=json", function(error, data) {
-  if (error) throw error;
-
-  color.domain(data.map(function (d) { return d.sector; }));
-  
-  data.forEach(function (kv) {
-      kv.indices.forEach(function (d) {
-          d.value = parseFloat(d.value);
-          d.created_at = parseDateJson(d.created_at);
-      });
+    sector.append("text")
+        .datum(function (d) {
+        return {
+            name: d.sector,
+            date: d.indices[d.indices.length - 1].created_at,
+            value: d.indices[d.indices.length - 1].value
+        };
+    })
+        .attr("transform", function (d) {
+        return "translate(" + x(d.date) + "," + y(d.value) + ")";
+    })
+        .attr("x", 3)
+        .attr("dy", ".35em")
+        .text(function (d) {
+            return d.name;
+    });
   });
 
-  var sectors = data;
-
-  var minX = d3.min(data, function (kv) { return d3.min(kv.indices, function (d) { return d.created_at; }) });
-  var maxX = d3.max(data, function (kv) { return d3.max(kv.indices, function (d) { return d.created_at; }) });
-  var minY = d3.min(data, function (kv) { return d3.min(kv.indices, function (d) { return d.value; }) });
-  var maxY = d3.max(data, function (kv) { return d3.max(kv.indices, function (d) { return d.value; }) });
-
-  x.domain([minX, maxX]);
-  y.domain([minY, maxY]);
-
-  svg.append("g")
-    .attr("class", "x axis")
-    .attr("transform", "translate(0," + height + ")")
-    .call(xAxis);
-
-  svg.append("g")
-      .attr("class", "y axis")
-      .call(yAxis)
-      .append("text")
-      .attr("transform", "rotate(-90)")
-      .attr("y", 6)
-      .attr("dy", ".71em")
-      .style("text-anchor", "end")
-      .text("value");
-
-  var sector = svg.selectAll(".sector")
-      .data(sectors)
-      .enter().append("g")
-      .attr("class", "sector");
-
-  sector.append("path")
-      .attr("class", "line")
-      .attr("d", function (d) {
-      return line(d.indices);
-  })
-      .style("stroke", function (d) {
-      return color(d.sector);
-  });
-
-  sector.append("text")
-      .datum(function (d) {
-      return {
-          name: d.sector,
-          date: d.indices[d.indices.length - 1].created_at,
-          value: d.indices[d.indices.length - 1].value
-      };
-  })
-      .attr("transform", function (d) {
-      return "translate(" + x(d.date) + "," + y(d.value) + ")";
-  })
-      .attr("x", 3)
-      .attr("dy", ".35em")
-      .text(function (d) {
-          return d.name;
-  });
-});
-
+}
 </script>
