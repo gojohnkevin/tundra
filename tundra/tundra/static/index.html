@@ -122,13 +122,14 @@ d3.tsv("data.tsv", function(error, data) {
 
 */
 
-d3.json("http://tundra.thekevingo.com/api/sectors/?format=json", function(error, data) {
+d3.json("http://localhost:8000/api/sectors/?format=json", function(error, data) {
   if (error) throw error;
 
   color.domain(data.map(function (d) { return d.sector; }));
   
   data.forEach(function (kv) {
       kv.indices.forEach(function (d) {
+          d.value = parseFloat(d.value);
           d.created_at = parseDateJson(d.created_at);
       });
   });

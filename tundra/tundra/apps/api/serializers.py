@@ -6,11 +6,11 @@ from pse.models import Sector, Index
 
 
 class IndexSerializer(serializers.ModelSerializer):
-    sector = serializers.StringRelatedField(many=False)
+    value   = serializers.DecimalField(max_digits=19, decimal_places=2)
 
     class Meta:
         model = Index
-        fields = ('sector', 'value', 'change', 'percent_change', 'status', 'created_at',)
+        fields = ('value', 'change', 'percent_change', 'status', 'created_at',)
 
 
 
