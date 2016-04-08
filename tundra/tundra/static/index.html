@@ -122,7 +122,7 @@ d3.tsv("data.tsv", function(error, data) {
 
 */
 
-d3.json("http://localhost:8000/api/sectors/?format=json", function(error, data) {
+d3.json("http://tundra.thekevingo.com/api/sectors/?format=json", function(error, data) {
   if (error) throw error;
 
   color.domain(data.map(function (d) { return d.sector; }));
