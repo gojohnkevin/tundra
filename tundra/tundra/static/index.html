@@ -50,10 +50,10 @@ $(document).ready(function(){
     $("svg").remove();
     var value = $(this).attr('value');
     if(value){
-      loadGraph(source_url+'?name='+ );
+      loadGraph(source_url+'?name='+ value);
     }
     else {
-      loadGraph(source_url)
+      loadGraph(source_url);
     }
   });
 });
