@@ -24,11 +24,11 @@ class Index(models.Model):
     value          = models.DecimalField(max_digits=10, decimal_places=2)
     change         = models.CharField(max_length=10)
     percent_change = models.CharField(max_length=20)
-    status         = models.CharField(max_length=10, default='OPEN')
+    status         = models.CharField(max_length=10, default='OPEN', choices=MARKET_STATUS_CHOICES)
     created_at     = models.DateTimeField(**optional)
 
     class Meta:
         verbose_name_plural = 'indices'
 
     def __unicode__(self):
-        return u'%s - %s' % (self.sector, self.value,)
+        return u'%s - %s - %s' % (self.sector, self.value, self.status,)
