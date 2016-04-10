@@ -16,10 +16,11 @@ class Command(BaseCommand):
         data = json.loads(response.read())
         indices = data.get('records', list())
         for index in indices:
-            sector = get_object_or_None(Sector, name=index.get('indexName'))
+            if index.get('marketStatus') != 'CLOSED':
+                sector = get_object_or_None(Sector, name=index.get('indexName'))
 
-            if sector:
-                Index.objects.create(sector=sector, value=index.get('indexPoints'), 
-                                        change=index.get('changeValue'), percent_change=index.get('percentageChange'),
-                                        status=index.get('marketStatus'), created_at=timezone.now())
-                self.stdout.write(self.style.SUCCESS('Succesfully pulled data for %s.' % (sector,)))
+                if sector:
+                    Index.objects.create(sector=sector, value=index.get('indexPoints'), 
+                                            change=index.get('changeValue'), percent_change=index.get('percentageChange'),
+                                            status=index.get('marketStatus'), created_at=timezone.now())
+                    self.stdout.write(self.style.SUCCESS('Succesfully pulled data for %s.' % (sector,)))
