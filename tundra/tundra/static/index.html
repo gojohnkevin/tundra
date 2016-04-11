@@ -86,7 +86,7 @@ function loadGraph(source_url){
       .interpolate("basis")
       .x(function(d) { return x(d.created_at); })
       .y(function(d) { return y(d.value); })
-      .defined(function(d) { return d.rating; });
+      .defined(function(d) { return d.value; });
 
   var svg = d3.select("body").append("svg")
       .attr("width", width + margin.left + margin.right)
