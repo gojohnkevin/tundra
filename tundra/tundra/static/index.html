@@ -40,7 +40,7 @@ body {
 <script src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
 
 <script type="text/javascript">
-var source_url = "http://tundra.thekevingo.com/api/sectors/";
+var source_url = "http://localhost:8000/api/sectors/";
 
 $(document).ready(function(){
   loadGraph(source_url);
@@ -83,10 +83,9 @@ function loadGraph(source_url){
       .orient("left");
 
   var line = d3.svg.line()
-      .interpolate("basis")
       .x(function(d) { return x(d.created_at); })
       .y(function(d) { return y(d.value); })
-      .defined(function(d) { return d.value!=null; });
+      .defined(function(d) { return d.value });
 
   var svg = d3.select("body").append("svg")
       .attr("width", width + margin.left + margin.right)
