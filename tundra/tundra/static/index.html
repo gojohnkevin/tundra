@@ -74,27 +74,6 @@ function loadGraph(source_url){
 
   var color = d3.scale.category10();
 
-  var xAxis = d3.svg.axis()
-      .scale(x)
-      .orient("bottom")
-      .ticks(0);
-
-  var yAxis = d3.svg.axis()
-      .scale(y)
-      .orient("left");
-
-  var line = d3.svg.line()
-      .interpolate("linear")
-      .x(function(d) { return x(d.created_at); })
-      .y(function(d) { return y(d.value); })
-      .defined(function(d) { return d.value });
-
-  var svg = d3.select("body").append("svg")
-      .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom)
-    .append("g")
-      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
   d3.json(source_url, function(error, data) {
     if (error) throw error;
 
@@ -116,6 +95,28 @@ function loadGraph(source_url){
 
     x.domain([minX, maxX]);
     y.domain([minY, maxY]);
+
+    var xAxis = d3.svg.axis()
+      .scale(x)
+      .tickFormat(d3.time.format('%b-%d'))
+      .orient("bottom")
+      .tickValues([minX, maxX]);
+
+    var yAxis = d3.svg.axis()
+        .scale(y)
+        .orient("left");
+
+    var line = d3.svg.line()
+        .interpolate("linear")
+        .x(function(d) { return x(d.created_at); })
+        .y(function(d) { return y(d.value); })
+        .defined(function(d) { return d.value });
+
+    var svg = d3.select("body").append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     svg.append("g")
       .attr("class", "x axis")
