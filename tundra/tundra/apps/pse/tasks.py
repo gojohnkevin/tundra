@@ -18,12 +18,13 @@ logger = get_task_logger(__name__)
 @app.task(name='get_pse_sector_indices')
 def get_pse_sector_indices():
     logger.info("Retrieving PSE sectors indices...")
+
     url = "http://www.pse.com.ph/stockMarket/dailySummary.html?method=getMarketIndices"
     response = urllib.urlopen(url)
     data = json.loads(response.read())
     indices = data.get('records', list())
     for index in indices:
-        if index.get('marketStatus'):
+        if index.get('marketStatus') != 'CLOSED':
             sector = get_object_or_None(Sector, name=index.get('indexName'))
 
             if sector:
