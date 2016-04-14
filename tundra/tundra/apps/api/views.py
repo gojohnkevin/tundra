@@ -39,16 +39,19 @@ class PSEIndicesView(views.APIView):
         """
         Return PSE indices
         """
-        range_value = request.GET.get('range')
+        range_value = request.GET.get('range', '')
+        name = request.GET.get('name', '')
         yesterday = datetime.date.fromordinal(datetime.date.today().toordinal()-1)
         today = datetime.date.today()
 
         if range_value and range_value in ['today', 'week', 'month',]:
             filtering = True
-            print 'lol'
 
         result = list()
-        sectors = Sector.objects.all().order_by('created_at')
+        if not name:
+            sectors = Sector.objects.all().order_by('created_at')
+        else:
+            sectors = Sector.objects.filter(name__iexact=name)
 
         for sector in sectors:
             sector_data = {

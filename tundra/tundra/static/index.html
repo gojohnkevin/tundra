@@ -40,7 +40,7 @@ body {
 <script src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
 
 <script type="text/javascript">
-var source_url = "http://tundra.thekevingo.com/api/sectors/";
+var source_url = "http://tundra.thekevingo.com/api/pse-indices/?range=today";
 
 $(document).ready(function(){
   loadGraph(source_url);
@@ -50,7 +50,7 @@ $(document).ready(function(){
     $("svg").remove();
     var value = $(this).attr('value');
     if(value){
-      loadGraph(source_url+'?name='+ value);
+      loadGraph(source_url+'&name='+ value);
     }
     else {
       loadGraph(source_url);
