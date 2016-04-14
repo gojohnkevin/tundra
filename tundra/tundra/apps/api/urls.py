@@ -10,6 +10,6 @@ router = routers.DefaultRouter()
 router.register(r'sectors', SectorViewSet)
 router.register(r'indices', IndexViewSet)
 
-urlpatterns = patterns('api.views',
+urlpatterns = [
     url(r'^', include(router.urls)),
-)
+]

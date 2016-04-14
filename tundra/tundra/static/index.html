@@ -98,9 +98,9 @@ function loadGraph(source_url){
 
     var xAxis = d3.svg.axis()
       .scale(x)
-      .tickFormat(d3.time.format('%b-%d'))
-      .orient("bottom")
-      .tickValues([minX, maxX]);
+      //.tickFormat(d3.time.format('%b-%d'))
+      .orient("bottom");
+      //.tickValues([minX, maxX]);
 
     var yAxis = d3.svg.axis()
         .scale(y)
@@ -130,8 +130,7 @@ function loadGraph(source_url){
         .attr("transform", "rotate(-90)")
         .attr("y", 6)
         .attr("dy", ".71em")
-        .style("text-anchor", "end")
-        .text("value");
+        .style("text-anchor", "end");
 
     var sector = svg.selectAll(".sector")
         .data(sectors)
