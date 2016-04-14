@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.9/ref/settings/
 """
 import os, sys
+import djcelery
 from django.conf import global_settings
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -127,6 +128,10 @@ REST_FRAMEWORK = {
     'DATETIME_FORMAT': "%Y%m%d%H%M",
     'DEFAULT_FILTER_BACKENDS': ('rest_framework.filters.DjangoFilterBackend',),
 }
+
+#Celery
+djcelery.setup_loader()
+CELERYBEAT_SCHEDULER = "djcelery.schedulers.DatabaseScheduler"
 
 try:
     from local_settings import *
