@@ -4,6 +4,7 @@ from rest_framework.response import Response
 
 from api.serializers import SectorSerializer, IndexSerializer
 from pse.models import Sector, Index
+from utils import week_range
 
 import django_filters
 
@@ -65,6 +66,8 @@ class PSEIndicesView(views.APIView):
                     context = sector.index_set.filter(created_at__date__range=[today, today])
                     if not context:
                         context = sector.index_set.filter(created_at__date__range=[yesterday, yesterday])
+                if range_value == 'week':
+                    context = sector.index_set.filter(created_at__date__range=[week_range(today)[0], week_range(today)[1]])
             for index in context:
                 index_data = {
                     "value": str(index.value),
