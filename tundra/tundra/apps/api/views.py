@@ -68,9 +68,20 @@ class PSEIndicesView(views.APIView):
                     context = sector.index_set.filter(created_at__date__range=[today, today])
                     if not context:
                         context = sector.index_set.filter(created_at__date__range=[yesterday, yesterday])
+
                 if range_value == 'month':
                     month_start_date = today + relativedelta(months=-1)
-                    context = sector.index_set.filter(created_at__date__range=[month_start_date, today])
+                    latest_ids = list()
+                    date = month_start_date
+                    while date <= today:
+                        try:
+                            item = sector.index_set.filter(created_at__date__range=[date, date]).latest('pk')
+                            latest_ids.append(item.pk)
+                        except Index.DoesNotExist:
+                            pass
+                        date += datetime.timedelta(days=1)
+                    context = sector.index_set.filter(pk__in=latest_ids)
+
             for index in context:
                 index_data = {
                     "value": str(index.value),
