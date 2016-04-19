@@ -1,4 +1,6 @@
 import datetime
+from dateutil.relativedelta import relativedelta
+
 from rest_framework import views, viewsets, filters, status
 from rest_framework.response import Response
 
@@ -45,7 +47,7 @@ class PSEIndicesView(views.APIView):
         yesterday = datetime.date.fromordinal(datetime.date.today().toordinal()-1)
         today = datetime.date.today()
 
-        if range_value and range_value in ['today', 'week', 'month',]:
+        if range_value and range_value in ['today', 'month',]:
             filtering = True
 
         result = list()
@@ -66,8 +68,9 @@ class PSEIndicesView(views.APIView):
                     context = sector.index_set.filter(created_at__date__range=[today, today])
                     if not context:
                         context = sector.index_set.filter(created_at__date__range=[yesterday, yesterday])
-                if range_value == 'week':
-                    context = sector.index_set.filter(created_at__date__range=[week_range(today)[0], week_range(today)[1]])
+                if range_value == 'month':
+                    month_start_date = today + relativedelta(months=-1)
+                    context = sector.index_set.filter(created_at__date__range=[month_start_date, today])
             for index in context:
                 index_data = {
                     "value": str(index.value),
